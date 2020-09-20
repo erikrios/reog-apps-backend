@@ -1,0 +1,5 @@
+{
+    "message": "Hello, Development!",
+    "db": "mongodb://localhost:27017/reogAppsDB",
+    "jwtPrivateKey": "reogAppsJwtPrivateKey"
+}
