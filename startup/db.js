@@ -12,4 +12,4 @@ module.exports = function () {
     })
         .then(() => console.log('Connected to database...'))
         .catch(ex => console.log(ex));
-}
+};

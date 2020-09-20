@@ -9,4 +9,4 @@ module.exports = function (app) {
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(useragent.express());
     app.use('/', home);
-}
+};
