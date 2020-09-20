@@ -24,12 +24,15 @@
   },
   "homepage": "https://github.com/erikrios/reog-apps-backend#readme",
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
     "config": "^3.3.1",
     "express": "^4.17.1",
     "helmet": "^4.1.1",
     "joi": "^17.2.1",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.20",
     "mongoose": "^5.10.6"
   }
 }
