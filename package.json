@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/erikrios/reog-apps-backend/issues"
   },
-  "homepage": "https://github.com/erikrios/reog-apps-backend#readme"
+  "homepage": "https://github.com/erikrios/reog-apps-backend#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
