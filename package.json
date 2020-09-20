@@ -1,0 +1,22 @@
+{
+  "name": "reog-apps-backend",
+  "version": "1.0.0",
+  "description": "The RESTful API of Reog Apps Based on Node.js, Express.js and MongoDB",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erikrios/reog-apps-backend.git"
+  },
+  "keywords": [
+    "reog-apps-backend"
+  ],
+  "author": "Erik Rio Setiawan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/erikrios/reog-apps-backend/issues"
+  },
+  "homepage": "https://github.com/erikrios/reog-apps-backend#readme"
+}
