@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/erikrios/reog-apps-backend#readme",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "compression": "^1.7.4",
     "config": "^3.3.1",
     "express": "^4.17.1",
