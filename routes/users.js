@@ -95,4 +95,15 @@ router.put('/avatar', [auth, avatar], async (req, res) => {
     }
 });
 
+router.delete('/avatar', auth, async (req, res) => {
+    try {
+        const avatar = Avatar.findOneAndDelete({ 'user._id': req.user._id });
+
+        if (!avatar) return res.status(404).send(new Response('error', null, 'Avatar not found.'));
+        res.send(new Response('success', [], null));
+    } catch (err) {
+        res.status(500).send(new Response('error', null, err.message));
+    }
+});
+
 module.exports = router;
