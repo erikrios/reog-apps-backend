@@ -65,7 +65,8 @@ router.post('/', auth, async (req, res) => {
     try {
         const news = new News({
             title: req.body.title,
-            description: req.body.description
+            description: req.body.description,
+            date: Date.now()
         });
 
         await news.save();
