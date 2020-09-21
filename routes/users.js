@@ -2,7 +2,9 @@ const express = require('express');
 const _ = require('lodash');
 const bcrypt = require('bcrypt');
 const { User, validate } = require('../models/user');
+const Avatar = require('../models/avatar');
 const auth = require('../middleware/auth');
+const avatar = require('../middleware/avatar');
 const Response = require('../models/response');
 
 const router = express.Router();
@@ -40,6 +42,24 @@ router.post('/', async (req, res) => {
             ],
             null
         ));
+    } catch (err) {
+        res.status(500).send(new Response('error', null, err.message));
+    }
+});
+
+router.post('/avatar', [auth, avatar], async (req, res) => {
+    try {
+        const avatar = new Avatar({
+            image: req.file.buffer,
+            user: {
+                _id: req.user._id,
+                name: req.user.name
+            }
+        });
+
+        await avatar.save();
+
+        res.send(new Response('success', [avatar.image.toString('base64'), null]));
     } catch (err) {
         res.status(500).send(new Response('error', null, err.message));
     }
