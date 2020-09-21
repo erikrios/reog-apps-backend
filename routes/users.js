@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
         user.dateRegistered = Date.now();
         user.lastLogin = Date.now();
 
-        const salt = await bcrypt.getSalt(10);
+        const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(user.password, salt);
         await user.save();
 
