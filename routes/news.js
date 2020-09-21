@@ -89,7 +89,7 @@ router.put('/:id', auth, (req, res) => {
                 'title': req.body.title,
                 'description': req.body.description
             }
-        }, { new: true });
+        }, { new: true }).select('-__v');
 
         if (!news) return res.status(404).send(new Response('error', null, 'News with given id was not found.'));
         res.send(new Response('success', [news], null));
