@@ -98,6 +98,19 @@ router.put('/:id', auth, (req, res) => {
     }
 });
 
+router.delete('/:id', auth, async (req, res) => {
+    if (!req.user.isAdmin) return res.status(401).send(new Response('error', null, 'Access denied for non-admin.'));
 
+    const id = req.params.id;
+
+    try {
+        const news = await News.findOneAndDelete({ _id: id }).select('-__v');
+
+        if (!news) return res.status(404).send(new Response('error', null, 'News with given id was not found.'));
+        res.send(new Response('success', [news], null));
+    } catch (err) {
+        res.status(500).send(new Response('error', null, err.message));
+    }
+});
 
 module.exports = router;
