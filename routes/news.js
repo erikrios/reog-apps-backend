@@ -75,7 +75,7 @@ router.post('/', auth, async (req, res) => {
     }
 });
 
-router.put('/:id', auth, (req, res) => {
+router.put('/:id', auth, async (req, res) => {
     const { error } = req.body;
     if (error) return res.status(400).send(new Response('error', null, error.details[0].message));
 
