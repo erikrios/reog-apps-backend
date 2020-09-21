@@ -10,7 +10,7 @@ const router = express.Router();
 router.get('/me', auth, async (req, res) => {
     try {
         const user = await User.findOne({ _id: req.user._id }).select('-password -__v');
-        res.send(new Response('success'), [user], null);
+        res.send(new Response('success', [user], null));
     } catch (err) {
         res.send(500).send(new Response('error', null, err.message));
     }
