@@ -14,6 +14,7 @@ const avatarSchema = new mongoose.Schema({
                 required: true
             }
         }),
+        unique: true,
         required: true
     }
 });
