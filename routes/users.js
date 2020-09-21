@@ -49,7 +49,10 @@ router.post('/', async (req, res) => {
 
 router.post('/avatar', [auth, avatar], async (req, res) => {
     try {
-        const avatar = new Avatar({
+        let avatar = await Avatar.findOne({ 'user._id': req.user._id });
+        if (avatar) return res.status(400).send(new Response('error', null, 'Avatar already exists.'));
+        
+        avatar = new Avatar({
             image: req.file.buffer,
             user: {
                 _id: req.user._id,
@@ -64,5 +67,17 @@ router.post('/avatar', [auth, avatar], async (req, res) => {
         res.status(500).send(new Response('error', null, err.message));
     }
 });
+
+router.get('/avatar', auth, async (req, res) => {
+    try {
+        const avatar = await Avatar
+            .findOne({ 'user._id': req.user._id })
+            .select('image');
+
+        res.send(new Response('success', [avatar.image.toString('base64'), null]));
+    } catch (err) {
+        res.status(500).send(new Response('error', null, err.message));
+    }
+})
 
 module.exports = router;
