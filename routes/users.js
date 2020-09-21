@@ -41,7 +41,7 @@ router.post('/', async (req, res) => {
             null
         ));
     } catch (err) {
-        res.send(500).send(new Response('error', null, err.message));
+        res.status(500).send(new Response('error', null, err.message));
     }
 });
 
