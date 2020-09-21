@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
 
 const avatarSchema = new mongoose.Schema({
-    image: Buffer,
+    image: {
+        type: Buffer,
+        required: true
+    },
     user: {
         type: new mongoose.Schema({
             name: {
