@@ -10,9 +10,12 @@ router.get('/', async (req, res) => {
     const { page = 1, limit = 10 } = req.query;
 
     try {
-        const news = await News.find()
+        const news = await News
+            .find()
+            .sort('-date')
             .limit(limit * 1)
             .skip((page - 1) * limit)
+            .select('-__v')
             .exec();
 
         const count = await News.countDocuments();
