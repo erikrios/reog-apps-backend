@@ -74,6 +74,7 @@ router.get('/avatar', auth, async (req, res) => {
             .findOne({ 'user._id': req.user._id })
             .select('image');
 
+        if (!avatar) return res.status(404).send(new Response('error', null, 'Avatar not found.'));
         res.send(new Response('success', [avatar.image.toString('base64'), null]));
     } catch (err) {
         res.status(500).send(new Response('error', null, err.message));
@@ -82,7 +83,7 @@ router.get('/avatar', auth, async (req, res) => {
 
 router.put('/avatar', [auth, avatar], async (req, res) => {
     try {
-        const avatar = Avatar.findOneAndUpdate({ 'user._id': req.user._id }, {
+        const avatar = await Avatar.findOneAndUpdate({ 'user._id': req.user._id }, {
             $set: {
                 'image': req.file.buffer
             }
@@ -97,7 +98,7 @@ router.put('/avatar', [auth, avatar], async (req, res) => {
 
 router.delete('/avatar', auth, async (req, res) => {
     try {
-        const avatar = Avatar.findOneAndDelete({ 'user._id': req.user._id });
+        const avatar = await Avatar.findOneAndDelete({ 'user._id': req.user._id });
 
         if (!avatar) return res.status(404).send(new Response('error', null, 'Avatar not found.'));
         res.send(new Response('success', [], null));

@@ -2,6 +2,11 @@ const multer = require('multer');
 const Response = require('../models/response');
 
 module.exports = function (req, res, next) {
+
+    if (!(req.header('Content-Type').includes('multipart/form-data'))) {
+        return res.status(400).send(new Response('error', null, 'Content-Type must be multipart/form-data.'));
+    }
+
     const storage = multer.memoryStorage();
 
     const upload = multer({
