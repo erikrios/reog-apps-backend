@@ -1,7 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const multer = require('multer');
-const useragent = require('../middleware/useragent');
 
 const router = express.Router();
 
@@ -35,7 +34,7 @@ const upload = multer({
     }
 }).single('avatar');
 
-router.post('/', useragent, async (req, res) => {
+router.post('/', async (req, res) => {
     upload(req, res, err => {
         if (err) return res.send(err.message);
 
@@ -55,7 +54,7 @@ router.post('/', useragent, async (req, res) => {
     });
 });
 
-router.get('/:id', useragent, async (req, res) => {
+router.get('/:id', async (req, res) => {
     Image.findOne({ _id: req.params.id })
         .then(result => {
             res.send(result.image.toString('base64'));
