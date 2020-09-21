@@ -51,7 +51,7 @@ router.post('/avatar', [auth, avatar], async (req, res) => {
     try {
         let avatar = await Avatar.findOne({ 'user._id': req.user._id });
         if (avatar) return res.status(400).send(new Response('error', null, 'Avatar already exists.'));
-        
+
         avatar = new Avatar({
             image: req.file.buffer,
             user: {
@@ -78,6 +78,21 @@ router.get('/avatar', auth, async (req, res) => {
     } catch (err) {
         res.status(500).send(new Response('error', null, err.message));
     }
-})
+});
+
+router.put('/avatar', [auth, avatar], async (req, res) => {
+    try {
+        const avatar = Avatar.findOneAndUpdate({ 'user._id': req.user._id }, {
+            $set: {
+                'image': req.file.buffer
+            }
+        }, { new: true });
+
+        if (!avatar) return res.status(404).send(new Response('error', null, 'Avatar not found.'));
+        res.send(new Response('success', [avatar.image.toString('base64')], null));
+    } catch (err) {
+        res.status(500).send(new Response('error', null, err.message));
+    }
+});
 
 module.exports = router;
