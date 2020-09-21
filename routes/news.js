@@ -33,6 +33,20 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/:id', async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        const news = await News.findOne({ _id: id })
+            .select('-__v');
+
+        if (!news) return res.status(404).send(new Response('error', null, 'News with given id was not found.'))
+        res.send(new Response('success', [news], null));
+    } catch (err) {
+        res.status(500).send(new Response('error', null, err.message));
+    }
+});
+
 router.post('/', auth, async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(new Response('error', null, error.details[0].message));
