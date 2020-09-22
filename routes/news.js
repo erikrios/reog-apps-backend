@@ -12,6 +12,7 @@ router.get('/', async (req, res) => {
     try {
         const news = await News
             .find()
+            .populate('images.image')
             .sort('-date')
             .limit(limit * 1)
             .skip((page - 1) * limit)
@@ -46,6 +47,7 @@ router.get('/:id', async (req, res) => {
                     views: 1
                 }
             }, { new: true })
+            .populate('images.image')
             .select('-__v');
 
         if (!news) return res.status(404).send(new Response('error', null, 'News with given id was not found.'))
