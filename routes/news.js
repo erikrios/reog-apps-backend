@@ -106,7 +106,7 @@ router.post('/', auth, async (req, res) => {
 });
 
 router.put('/:id', auth, async (req, res) => {
-    const { error } = req.body;
+    const { error } = validate(req.body);
     if (error) return res.status(400).send(new Response('error', null, error.details[0].message));
 
     if (!req.user.isAdmin) return res.status(401).send(new Response('error', null, 'Access denied for non-admin.'));
@@ -182,7 +182,7 @@ router.put('/image/:id', [auth, avatar], async (req, res) => {
     }
 });
 
-router.delete('/image/:id', [auth, avatar], async (req, res) => {
+router.delete('/image/:id', auth, async (req, res) => {
     if (!req.user.isAdmin) return res.status(401).send(new Response('error', null, 'Access denied for non-admin.'));
 
     const id = req.params.id
@@ -192,7 +192,6 @@ router.delete('/image/:id', [auth, avatar], async (req, res) => {
         if (imageCount < 1) return res.status(404).send(new Response('error', null, 'Image with given id was not found.'));
 
         await Image.deleteOne({ _id: id });
-        await News.updateOne({ 'images.image._id': id }, { $pop: { images: image._id } });
         res.send(new Response('success', null, null));
     } catch (err) {
         res.status(500).send(new Response('error', null, err.message));
