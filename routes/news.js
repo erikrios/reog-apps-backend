@@ -156,11 +156,9 @@ router.post('/image', [auth, avatar], async (req, res) => {
             image: req.file.buffer,
             news: id
         });
-        console.log(image._id);
 
         await News.updateOne({ _id: id }, { $push: { images: image._id } });
         await image.save();
-        console.log(image._id);
 
         res.send(new Response('success', null, null));
     } catch (err) {
