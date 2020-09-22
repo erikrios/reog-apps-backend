@@ -6,7 +6,7 @@ const imageSchema = new mongoose.Schema({
         type: Buffer,
         required: true
     },
-    article: { type: Schema.Types.ObjectId, ref: 'News' }
+    news: { type: Schema.Types.ObjectId, ref: 'News' }
 });
 
 const Image = mongoose.model('Image', imageSchema);

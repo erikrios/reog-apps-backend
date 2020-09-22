@@ -154,7 +154,7 @@ router.post('/image', [auth, avatar], async (req, res) => {
 
         const image = new Image({
             image: req.file.buffer,
-            article: id
+            news: id
         });
         console.log(image._id);
 
