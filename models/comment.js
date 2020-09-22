@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
+const Schema = mongoose.Schema;
 
 const commentSchema = new mongoose.Schema({
     comment: {
@@ -21,12 +22,7 @@ const commentSchema = new mongoose.Schema({
     },
     article: {
         type: new mongoose.Schema({
-            title: {
-                type: String,
-                minlength: 1,
-                maxlength: 255,
-                required: true
-            }
+            _id: Schema.Types.ObjectId
         }),
         required: true
     },
