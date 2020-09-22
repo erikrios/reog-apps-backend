@@ -1,4 +1,5 @@
 const express = require('express');
+const _ = require('lodash');
 const { News, validate } = require('../models/news');
 const Image = require('../models/image');
 const Response = require('../models/response');
@@ -14,7 +15,7 @@ router.get('/', async (req, res) => {
     try {
         const news = await News
             .find()
-            .populate('images.image')
+            .populate({ path: 'images', model: 'Image' })
             .sort('-date')
             .limit(limit * 1)
             .skip((page - 1) * limit)
@@ -23,11 +24,26 @@ router.get('/', async (req, res) => {
 
         const count = await News.countDocuments();
 
+        const results = []
+
+        news.forEach(newsElement => {
+            const result = _.pick(newsElement, ['_id', 'title', 'description', 'date', 'views']);
+            const encodeImage = [];
+
+            newsElement.images.forEach(image => {
+                encodeImage.push({ _id: image._id, image: image.image.toString('base64') });
+            });
+
+            result.images = [...encodeImage];
+
+            results.push(result);
+        });
+
         res.send(new Response(
             'success',
             [
                 {
-                    news: news,
+                    news: results,
                     totalPages: Math.ceil(count / limit),
                     currentPage: page
                 }
@@ -49,12 +65,21 @@ router.get('/:id', async (req, res) => {
                     views: 1
                 }
             }, { new: true })
-            .populate('images.image')
+            .populate({ path: 'images', model: 'Image' })
             .select('-__v');
 
         if (!news) return res.status(404).send(new Response('error', null, 'News with given id was not found.'))
 
-        res.send(new Response('success', [news], null));
+        // Encode the byte array to base64
+        const encodeImage = [];
+        news.images.forEach(image => {
+            encodeImage.push({ _id: image._id, image: image.image.toString('base64') });
+        });
+
+        const result = _.pick(news, ['_id', 'title', 'description', 'date', 'views']);
+        result.images = [...encodeImage];
+
+        res.send(new Response('success', [result], null));
     } catch (err) {
         res.status(500).send(new Response('error', null, err.message));
     }
@@ -124,16 +149,18 @@ router.post('/image', [auth, avatar], async (req, res) => {
     const id = req.query.id
 
     try {
-        const newsCount = await News.count({ _id: id });
+        const newsCount = await News.countDocuments({ _id: id });
         if (newsCount < 1) return res.status(404).send(new Response('error', null, 'News with given id was not found.'));
 
         const image = new Image({
             image: req.file.buffer,
             article: id
         });
+        console.log(image._id);
 
-        await image.save();
         await News.updateOne({ _id: id }, { $push: { images: image._id } });
+        await image.save();
+        console.log(image._id);
 
         res.send(new Response('success', null, null));
     } catch (err) {
@@ -147,7 +174,7 @@ router.put('/image/:id', [auth, avatar], async (req, res) => {
     const id = req.params.id;
 
     try {
-        const imageCount = await Image.count({ _id: id });
+        const imageCount = await Image.countDocuments({ _id: id });
         if (imageCount < 1) return res.status(404).send(new Response('error', null, 'Image with given id was not found.'));
 
         await Image.updateOne({ _id: id }, { $set: { image: req.file.buffer } });
@@ -163,10 +190,11 @@ router.delete('/image/:id', [auth, avatar], async (req, res) => {
     const id = req.params.id
 
     try {
-        const imageCount = await Image.count({ _id: id });
+        const imageCount = await Image.countDocuments({ _id: id });
         if (imageCount < 1) return res.status(404).send(new Response('error', null, 'Image with given id was not found.'));
 
         await Image.deleteOne({ _id: id });
+        await News.updateOne({ 'images.image._id': id }, { $pop: { images: image._id } });
         res.send(new Response('success', null, null));
     } catch (err) {
         res.status(500).send(new Response('error', null, err.message));

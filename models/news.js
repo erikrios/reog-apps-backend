@@ -23,12 +23,7 @@ const newsSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    images: {
-        type: [
-            { image: { type: Schema.Types.ObjectId, ref: 'Image' } }
-        ],
-        default: []
-    }
+    images: [{ type: Schema.Types.ObjectId, ref: 'Image' }]
 });
 
 const News = mongoose.model('News', newsSchema);
