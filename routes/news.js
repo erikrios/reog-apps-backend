@@ -2,6 +2,7 @@ const express = require('express');
 const _ = require('lodash');
 const { News, validate } = require('../models/news');
 const Image = require('../models/image');
+const { Comment, validateComment } = require('../models/comment');
 const Response = require('../models/response');
 const auth = require('../middleware/auth');
 const avatar = require('../middleware/avatar');
@@ -194,6 +195,26 @@ router.delete('/image/:id', [auth, avatar], async (req, res) => {
         await Image.deleteOne({ _id: id });
         await News.updateOne({ 'images.image._id': id }, { $pop: { images: image._id } });
         res.send(new Response('success', null, null));
+    } catch (err) {
+        res.status(500).send(new Response('error', null, err.message));
+    }
+});
+
+router.get('/comments', auth, async (req, res) => {
+    const { error } = validateComment(req.body);
+    if (error) return res.status(400).send(new Response('error', null, error.details[0].message));
+
+    const id = req.query.id;
+
+    try {
+        const newsCount = await News.countDocuments({ _id: req.user._id });
+        if (newsCount < 1) return res.status(404).send(new Response('error', null, 'Note with given id was not found.'));
+
+        const comments = await Comment
+        .find({ _id: id })
+        .sort('-date')
+        .select('-__v');
+        res.send(new Response('success', [comments], null));
     } catch (err) {
         res.status(500).send(new Response('error', null, err.message));
     }
