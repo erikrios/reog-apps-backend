@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
+const Schema = mongoose.Schema
 
 const newsSchema = new mongoose.Schema({
     title: {
@@ -21,6 +22,12 @@ const newsSchema = new mongoose.Schema({
     views: {
         type: Number,
         default: 0
+    },
+    images: {
+        type: [
+            { image: { type: Schema.Types.ObjectId, ref: 'Image' } }
+        ],
+        default: []
     }
 });
 
