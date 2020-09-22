@@ -26,7 +26,7 @@ const siteSchema = new mongoose.Schema({
     images: [{ type: Schema.Types.ObjectId, ref: 'Image' }]
 });
 
-const Site = mongoose.model('Site', newsSchema);
+const Site = mongoose.model('Site', siteSchema);
 
 function validateSite(site) {
     const schema = Joi.object({
@@ -34,7 +34,7 @@ function validateSite(site) {
         description: Joi.string().min(1).max(102400).required()
     });
 
-    return schema.validate(news);
+    return schema.validate(site);
 }
 
 module.exports = {
