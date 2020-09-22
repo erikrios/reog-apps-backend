@@ -44,5 +44,5 @@ function validateComment(comment) {
 
 module.exports = {
     Comment: Comment,
-    validate: validateComment
+    validateComment: validateComment
 };
