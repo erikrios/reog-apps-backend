@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
             await News.countDocuments({ _id: id }) ||
             await Site.countDocuments({ _id: id }) ||
             await Food.countDocuments({ _id: id });
-        if (count < 1) return res.status(404).send(new Response('error', null, 'News with given id was not found.'));
+        if (count < 1) return res.status(404).send(new Response('error', null, 'Article with given id was not found.'));
 
         const comments = await Comment
             .find({ 'article._id': id })
@@ -35,8 +35,11 @@ router.post('/', auth, async (req, res) => {
     const id = req.query.id;
 
     try {
-        const count = await News.countDocuments({ _id: id }) || await Site.countDocuments({ _id: id });
-        if (count < 1) return res.status(404).send(new Response('error', null, 'News with given id was not found.'));
+        const count =
+            await News.countDocuments({ _id: id }) ||
+            await Site.countDocuments({ _id: id }) ||
+            await Food.countDocuments({ _id: id });
+        if (count < 1) return res.status(404).send(new Response('error', null, 'Article with given id was not found.'));
 
         const comment = new Comment({
             comment: req.body.comment,
