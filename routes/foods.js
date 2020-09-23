@@ -1,7 +1,6 @@
 const express = require('express');
 const _ = require('lodash');
-const { Food, validate } = require('../models/food
-');
+const { Food, validate } = require('../models/food');
 const Image = require('../models/image');
 const Response = require('../models/response');
 const auth = require('../middleware/auth');
@@ -14,29 +13,25 @@ router.get('/', async (req, res) => {
     const { page = 1, limit = 10 } = req.query;
 
     try {
-        const food
-         = await Food
-            .find()
-            .populate({ path: 'images', model: 'Image' })
-            .sort('-date')
-            .limit(limit * 1)
-            .skip((page - 1) * limit)
-            .select('-__v')
-            .exec();
+        const foods
+            = await Food
+                .find()
+                .populate({ path: 'images', model: 'Image' })
+                .sort('-date')
+                .limit(limit * 1)
+                .skip((page - 1) * limit)
+                .select('-__v')
+                .exec();
 
         const count = await Food.countDocuments();
 
         const results = []
 
-        food
-        .forEach(food
-            Element => {
-            const result = _.pick(food
-                Element, ['_id', 'title', 'description', 'date', 'views']);
+        foods.forEach(food => {
+            const result = _.pick(food, ['_id', 'title', 'description', 'date', 'views']);
             const encodeImage = [];
 
-            food
-            Element.images.forEach(image => {
+            food.images.forEach(image => {
                 encodeImage.push({ _id: image._id, image: image.image.toString('base64') });
             });
 
@@ -50,7 +45,7 @@ router.get('/', async (req, res) => {
             [
                 {
                     food
-                    : results,
+                        : results,
                     totalPages: Math.ceil(count / limit),
                     currentPage: page
                 }
@@ -67,24 +62,24 @@ router.get('/:id', async (req, res) => {
 
     try {
         const food
-         = await Food
-            .findOneAndUpdate({ _id: id }, {
-                $inc: {
-                    views: 1
-                }
-            }, { new: true })
-            .populate({ path: 'images', model: 'Image' })
-            .select('-__v');
+            = await Food
+                .findOneAndUpdate({ _id: id }, {
+                    $inc: {
+                        views: 1
+                    }
+                }, { new: true })
+                .populate({ path: 'images', model: 'Image' })
+                .select('-__v');
 
         if (!food
-            ) return res.status(404).send(new Response('error', null, 'Food with given id was not found.'))
+        ) return res.status(404).send(new Response('error', null, 'Food with given id was not found.'))
 
         // Encode the byte array to base64
         const encodeImage = [];
         food
-        .images.forEach(image => {
-            encodeImage.push({ _id: image._id, image: image.image.toString('base64') });
-        });
+            .images.forEach(image => {
+                encodeImage.push({ _id: image._id, image: image.image.toString('base64') });
+            });
 
         const result = _.pick(food
             , ['_id', 'title', 'description', 'date', 'views']);
@@ -104,14 +99,14 @@ router.post('/', auth, async (req, res) => {
 
     try {
         const food
-         = new Food({
-            title: req.body.title,
-            description: req.body.description,
-            date: Date.now()
-        });
+            = new Food({
+                title: req.body.title,
+                description: req.body.description,
+                date: Date.now()
+            });
 
         await food
-        .save();
+            .save();
         res.send(new Response('success', [food
         ], null));
     } catch (err) {
@@ -129,15 +124,15 @@ router.put('/:id', auth, async (req, res) => {
 
     try {
         const food
-         = await Food.findOneAndUpdate({ _id: id }, {
-            $set: {
-                'title': req.body.title,
-                'description': req.body.description
-            }
-        }, { new: true }).select('-__v');
+            = await Food.findOneAndUpdate({ _id: id }, {
+                $set: {
+                    'title': req.body.title,
+                    'description': req.body.description
+                }
+            }, { new: true }).select('-__v');
 
         if (!food
-            ) return res.status(404).send(new Response('error', null, 'Food with given id was not found.'));
+        ) return res.status(404).send(new Response('error', null, 'Food with given id was not found.'));
         res.send(new Response('success', [food
         ], null));
     } catch (err) {
@@ -152,10 +147,10 @@ router.delete('/:id', auth, async (req, res) => {
 
     try {
         const food
-         = await Food.findOneAndDelete({ _id: id }).select('-__v');
+            = await Food.findOneAndDelete({ _id: id }).select('-__v');
 
         if (!food
-            ) return res.status(404).send(new Response('error', null, 'Food with given id was not found.'));
+        ) return res.status(404).send(new Response('error', null, 'Food with given id was not found.'));
         res.send(new Response('success', [food
         ], null));
     } catch (err) {
@@ -169,15 +164,13 @@ router.post('/image', [auth, avatar], async (req, res) => {
     const id = req.query.id
 
     try {
-        const food
-        Count = await Food.countDocuments({ _id: id });
-        if (food
-            Count < 1) return res.status(404).send(new Response('error', null, 'Food with given id was not found.'));
+        const foodCount = await Food.countDocuments({ _id: id });
+        if (foodCount < 1) return res.status(404).send(new Response('error', null, 'Food with given id was not found.'));
 
         const image = new Image({
             image: req.file.buffer,
             food
-            : id
+                : id
         });
 
         await Food.updateOne({ _id: id }, { $push: { images: image._id } });
