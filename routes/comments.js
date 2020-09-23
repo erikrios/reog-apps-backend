@@ -2,6 +2,7 @@ const express = require('express');
 const { Comment, validateComment } = require('../models/comment');
 const { News } = require('../models/news');
 const { Site } = require('../models/site');
+const { Food } = require('../models/food');
 const Response = require('../models/response');
 const auth = require('../middleware/auth');
 
@@ -11,7 +12,10 @@ router.get('/', async (req, res) => {
     const id = req.query.id;
 
     try {
-        const count = await News.countDocuments({ _id: id }) || await Site.countDocuments({ _id: id });
+        const count =
+            await News.countDocuments({ _id: id }) ||
+            await Site.countDocuments({ _id: id }) ||
+            await Food.countDocuments({ _id: id });
         if (count < 1) return res.status(404).send(new Response('error', null, 'News with given id was not found.'));
 
         const comments = await Comment
