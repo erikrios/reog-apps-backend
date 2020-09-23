@@ -20,7 +20,7 @@ router.get('/', async (req, res) => {
 
         const comments = await Comment
             .find({ 'article._id': id })
-            .sort('-date')
+            .sort('date')
             .select('-__v');
         res.send(new Response('success', [comments], null));
     } catch (err) {
