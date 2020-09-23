@@ -71,18 +71,15 @@ router.get('/:id', async (req, res) => {
                 .populate({ path: 'images', model: 'Image' })
                 .select('-__v');
 
-        if (!food
-        ) return res.status(404).send(new Response('error', null, 'Food with given id was not found.'))
+        if (!food) return res.status(404).send(new Response('error', null, 'Food with given id was not found.'))
 
         // Encode the byte array to base64
         const encodeImage = [];
-        food
-            .images.forEach(image => {
+        food.images.forEach(image => {
                 encodeImage.push({ _id: image._id, image: image.image.toString('base64') });
             });
 
-        const result = _.pick(food
-            , ['_id', 'title', 'description', 'date', 'views']);
+        const result = _.pick(food, ['_id', 'title', 'description', 'date', 'views']);
         result.images = [...encodeImage];
 
         res.send(new Response('success', [result], null));
@@ -98,17 +95,14 @@ router.post('/', auth, async (req, res) => {
     if (!req.user.isAdmin) return res.status(401).send(new Response('error', null, 'Access denied for non-admin.'));
 
     try {
-        const food
-            = new Food({
+        const food = new Food({
                 title: req.body.title,
                 description: req.body.description,
                 date: Date.now()
             });
 
-        await food
-            .save();
-        res.send(new Response('success', [food
-        ], null));
+        await food.save();
+        res.send(new Response('success', [food], null));
     } catch (err) {
         res.status(500).send(new Response('error', null, err.message));
     }
@@ -123,18 +117,15 @@ router.put('/:id', auth, async (req, res) => {
     const id = req.params.id;
 
     try {
-        const food
-            = await Food.findOneAndUpdate({ _id: id }, {
+        const food = await Food.findOneAndUpdate({ _id: id }, {
                 $set: {
                     'title': req.body.title,
                     'description': req.body.description
                 }
             }, { new: true }).select('-__v');
 
-        if (!food
-        ) return res.status(404).send(new Response('error', null, 'Food with given id was not found.'));
-        res.send(new Response('success', [food
-        ], null));
+        if (!food) return res.status(404).send(new Response('error', null, 'Food with given id was not found.'));
+        res.send(new Response('success', [food], null));
     } catch (err) {
         res.status(500).send(new Response('error', null, err.message));
     }
@@ -146,13 +137,10 @@ router.delete('/:id', auth, async (req, res) => {
     const id = req.params.id;
 
     try {
-        const food
-            = await Food.findOneAndDelete({ _id: id }).select('-__v');
+        const food = await Food.findOneAndDelete({ _id: id }).select('-__v');
 
-        if (!food
-        ) return res.status(404).send(new Response('error', null, 'Food with given id was not found.'));
-        res.send(new Response('success', [food
-        ], null));
+        if (!food) return res.status(404).send(new Response('error', null, 'Food with given id was not found.'));
+        res.send(new Response('success', [food], null));
     } catch (err) {
         res.status(500).send(new Response('error', null, err.message));
     }
