@@ -28,13 +28,13 @@ const foodSchema = new mongoose.Schema({
 
 const Food = mongoose.model('Food', foodSchema);
 
-function validateFood(site) {
+function validateFood(food) {
     const schema = Joi.object({
         title: Joi.string().min(1).max(255).required(),
         description: Joi.string().min(1).max(102400).required()
     });
 
-    return schema.validate(site);
+    return schema.validate(food);
 }
 
 module.exports = {
