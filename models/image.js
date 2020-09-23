@@ -7,7 +7,8 @@ const imageSchema = new mongoose.Schema({
         required: true
     },
     news: { type: Schema.Types.ObjectId, ref: 'News' },
-    site: { type: Schema.Types.ObjectId, ref: 'Sites' }
+    site: { type: Schema.Types.ObjectId, ref: 'Site' },
+    food: { type: Schema.Types.ObjectId, ref: 'Food' }
 });
 
 const Image = mongoose.model('Image', imageSchema);
