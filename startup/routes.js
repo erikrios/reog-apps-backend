@@ -8,6 +8,7 @@ const news = require('../routes/news');
 const sites = require('../routes/sites');
 const foods = require('../routes/foods');
 const histories = require('../routes/histories');
+const wallpapers = require('../routes/wallpapers');
 const comments = require('../routes/comments');
 
 module.exports = function (app) {
@@ -20,5 +21,6 @@ module.exports = function (app) {
     app.use('/api/sites', sites);
     app.use('/api/foods', foods);
     app.use('/api/histories', histories);
+    app.use('/api/wallpapers', wallpapers);
     app.use('/api/comments', comments);
 };
