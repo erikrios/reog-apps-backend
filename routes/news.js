@@ -45,7 +45,7 @@ router.get('/', async (req, res) => {
                 {
                     news: results,
                     totalPages: Math.ceil(count / limit),
-                    currentPage: page
+                    currentPage: parseInt(page)
                 }
             ],
             null
