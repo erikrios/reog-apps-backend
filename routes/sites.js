@@ -27,15 +27,7 @@ router.get('/', async (req, res) => {
         const results = []
 
         site.forEach(siteElement => {
-            const result = _.pick(siteElement, ['_id', 'title', 'description', 'date', 'views']);
-            const encodeImage = [];
-
-            siteElement.images.forEach(image => {
-                encodeImage.push({ _id: image._id, image: image.image.toString('base64') });
-            });
-
-            result.images = [...encodeImage];
-
+            const result = _.pick(siteElement, ['_id', 'title', 'description', 'date', 'views', 'images']);
             results.push(result);
         });
 
