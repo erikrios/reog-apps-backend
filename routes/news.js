@@ -63,14 +63,7 @@ router.get('/:id', async (req, res) => {
 
         if (!news) return res.status(404).send(new Response('error', null, 'News with given id was not found.'))
 
-        // Encode the byte array to base64
-        const encodeImage = [];
-        news.images.forEach(image => {
-            encodeImage.push({ _id: image._id, image: image.image.toString('base64') });
-        });
-
-        const result = _.pick(news, ['_id', 'title', 'description', 'date', 'views']);
-        result.images = [...encodeImage];
+        const result = _.pick(news, ['_id', 'title', 'description', 'date', 'views', 'images']);
 
         res.send(new Response('success', [result], null));
     } catch (err) {
@@ -136,7 +129,7 @@ router.delete('/:id', auth, async (req, res) => {
     }
 });
 
-router.post('/image', [auth, avatar], async (req, res) => {
+router.post('/image', auth, async (req, res) => {
     if (!req.user.isAdmin) return res.status(401).send(new Response('error', null, 'Access denied for non-admin.'));
 
     const id = req.query.id
@@ -146,7 +139,7 @@ router.post('/image', [auth, avatar], async (req, res) => {
         if (newsCount < 1) return res.status(404).send(new Response('error', null, 'News with given id was not found.'));
 
         const image = new Image({
-            image: req.file.buffer,
+            image: req.body.image,
             news: id
         });
 
