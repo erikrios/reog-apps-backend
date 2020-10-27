@@ -140,7 +140,7 @@ router.post('/image', [auth, avatar], async (req, res) => {
         if (foodCount < 1) return res.status(404).send(new Response('error', null, 'Food with given id was not found.'));
 
         const image = new Image({
-            image: req.file.buffer,
+            image: req.body,
             food : id
         });
 
