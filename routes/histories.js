@@ -62,14 +62,7 @@ router.get('/:id', async (req, res) => {
 
         if (!history) return res.status(404).send(new Response('error', null, 'History with given id was not found.'))
 
-        // Encode the byte array to base64
-        const encodeImage = [];
-        history.images.forEach(image => {
-            encodeImage.push({ _id: image._id, image: image.image.toString('base64') });
-        });
-
-        const result = _.pick(history, ['_id', 'title', 'description', 'date', 'views']);
-        result.images = [...encodeImage];
+        const result = _.pick(history, ['_id', 'title', 'description', 'date', 'views', 'images']);
 
         res.send(new Response('success', [result], null));
     } catch (err) {
