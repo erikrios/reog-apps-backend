@@ -128,7 +128,7 @@ router.delete('/:id', auth, async (req, res) => {
     }
 });
 
-router.post('/image', [auth, avatar], async (req, res) => {
+router.post('/image', auth, async (req, res) => {
     if (!req.user.isAdmin) return res.status(401).send(new Response('error', null, 'Access denied for non-admin.'));
 
     const id = req.query.id
@@ -151,7 +151,7 @@ router.post('/image', [auth, avatar], async (req, res) => {
     }
 });
 
-router.put('/image/:id', [auth, avatar], async (req, res) => {
+router.put('/image/:id', auth, async (req, res) => {
     if (!req.user.isAdmin) return res.status(401).send(new Response('error', null, 'Access denied for non-admin.'));
 
     const id = req.params.id;
