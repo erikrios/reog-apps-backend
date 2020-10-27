@@ -28,15 +28,7 @@ router.get('/', async (req, res) => {
         const results = []
 
         foods.forEach(food => {
-            const result = _.pick(food, ['_id', 'title', 'description', 'date', 'views']);
-            const encodeImage = [];
-
-            food.images.forEach(image => {
-                encodeImage.push({ _id: image._id, image: image.image.toString('base64') });
-            });
-
-            result.images = [...encodeImage];
-
+            const result = _.pick(food, ['_id', 'title', 'description', 'date', 'views', 'images']);
             results.push(result);
         });
 
