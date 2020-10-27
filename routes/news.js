@@ -152,7 +152,7 @@ router.post('/image', auth, async (req, res) => {
     }
 });
 
-router.put('/image/:id', [auth, avatar], async (req, res) => {
+router.put('/image/:id', auth, async (req, res) => {
     if (!req.user.isAdmin) return res.status(401).send(new Response('error', null, 'Access denied for non-admin.'));
 
     const id = req.params.id;
@@ -161,7 +161,7 @@ router.put('/image/:id', [auth, avatar], async (req, res) => {
         const imageCount = await Image.countDocuments({ _id: id });
         if (imageCount < 1) return res.status(404).send(new Response('error', null, 'Image with given id was not found.'));
 
-        await Image.updateOne({ _id: id }, { $set: { image: req.file.buffer } });
+        await Image.updateOne({ _id: id }, { $set: { image: req.body.image } });
         res.send(new Response('success', null, null));
     } catch (err) {
         res.status(500).send(new Response('error', null, err.message));
