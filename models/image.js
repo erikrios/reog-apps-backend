@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const imageSchema = new mongoose.Schema({
     image: {
-        type: Buffer,
+        type: String,
         required: true
     },
     news: { type: Schema.Types.ObjectId, ref: 'News' },
