@@ -65,15 +65,7 @@ router.get('/:id', async (req, res) => {
 
         if (!food) return res.status(404).send(new Response('error', null, 'Food with given id was not found.'))
 
-        // Encode the byte array to base64
-        const encodeImage = [];
-        food.images.forEach(image => {
-                encodeImage.push({ _id: image._id, image: image.image.toString('base64') });
-            });
-
-        const result = _.pick(food, ['_id', 'title', 'description', 'date', 'views']);
-        result.images = [...encodeImage];
-
+        const result = _.pick(food, ['_id', 'title', 'description', 'date', 'views', 'images']);
         res.send(new Response('success', [result], null));
     } catch (err) {
         res.status(500).send(new Response('error', null, err.message));
