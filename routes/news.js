@@ -27,14 +27,7 @@ router.get('/', async (req, res) => {
         const results = []
 
         news.forEach(newsElement => {
-            const result = _.pick(newsElement, ['_id', 'title', 'description', 'date', 'views']);
-            const encodeImage = [];
-
-            newsElement.images.forEach(image => {
-                encodeImage.push({ _id: image._id, image: image.image.toString('base64') });
-            });
-
-            result.images = [...encodeImage];
+            const result = _.pick(newsElement, ['_id', 'title', 'description', 'date', 'views', 'images']);
 
             results.push(result);
         });
