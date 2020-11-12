@@ -41,7 +41,7 @@ router.get("/", async (req, res) => {
         "success",
         [
           {
-            food: results,
+            articles: results,
             totalPages: Math.ceil(count / limit),
             currentPage: parseInt(page),
           },
