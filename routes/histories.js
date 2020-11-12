@@ -138,7 +138,7 @@ router.post('/image', auth, async (req, res) => {
         if (foodCount < 1) return res.status(404).send(new Response('error', null, 'History with given id was not found.'));
 
         const image = new Image({
-            image: req.body,
+            image: req.body.image,
             history: id
         });
 

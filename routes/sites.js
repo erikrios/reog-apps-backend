@@ -138,7 +138,7 @@ router.post('/image', auth, async (req, res) => {
         if (siteCount < 1) return res.status(404).send(new Response('error', null, 'Site with given id was not found.'));
 
         const image = new Image({
-            image: req.body,
+            image: req.body.image,
             site: id
         });
 
