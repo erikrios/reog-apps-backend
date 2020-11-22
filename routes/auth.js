@@ -8,8 +8,6 @@ const Response = require('../models/response');
 const router = express.Router();
 
 router.post('/', async (req, res) => {
-    console.log(req.headers);
-    console.log(req.body);
     const { error } = validate(req.body);
     if (error) return res.status(400).send(new Response('error', null, error.details[0].message));
 

@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
             .find({ 'article._id': id })
             .sort('date')
             .select('-__v');
-        res.send(new Response('success', [comments], null));
+        res.send(new Response('success', comments, null));
     } catch (err) {
         res.status(500).send(new Response('error', null, err.message));
     }

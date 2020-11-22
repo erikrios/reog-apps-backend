@@ -75,7 +75,7 @@ router.get('/avatar', auth, async (req, res) => {
             .select('image');
 
         if (!avatar) return res.status(404).send(new Response('error', null, 'Avatar not found.'));
-        res.send(new Response('success', [avatar.image.toString('base64'), null]));
+        res.send(new Response('success', [avatar.image.toString('base64')], null));
     } catch (err) {
         res.status(500).send(new Response('error', null, err.message));
     }
